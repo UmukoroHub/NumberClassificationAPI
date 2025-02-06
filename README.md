@@ -60,7 +60,7 @@ The **Number Classification API** is a RESTful service that takes an integer as 
 
 ## 🚀 Clone Repository  
 ```sh
-git clone https://github.com/UmukoroHub/number-classification-api
+git clone https://github.com/UmukoroHub/NumberClassificationAPI
 cd number-classification-api
 
 https://hng.tech/hire/csharp-developers
