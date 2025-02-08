@@ -82,7 +82,7 @@ namespace NumberClassificationAPI.Service
 
         private int GetDigitSum(int number)
         {
-            return number.ToString().Select(c => c - '0').Sum();
+            return Math.Abs(number).ToString().Select(c => c - '0').Sum();
         }
 
 

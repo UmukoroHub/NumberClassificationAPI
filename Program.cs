@@ -5,45 +5,54 @@ using System.Numerics;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Set the default port to 8080 for Render but allow local access
+var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
+var localhostUrl = $"http://localhost:{port}";
 
+// Add services to the container
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IRestHelper, RestHelper>();
 builder.Services.AddScoped<INumberFact, NumberFact>();
 
-builder.Services.AddHttpClient ("", 
-    client =>
-    {
-        client.Timeout = TimeSpan.FromMinutes(1);
-        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-    });
-
-builder.Services.AddCors(p => p.AddPolicy("AllowAll", policy =>
+builder.Services.AddHttpClient("", client =>
 {
-    policy.AllowAnyOrigin()
-                  .AllowAnyMethod()
-                  .AllowAnyHeader();
-}));
+    client.Timeout = TimeSpan.FromMinutes(1);
+    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+});
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Allow local development access
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.Urls.Add(localhostUrl);
+}
+else
+{
+    app.Urls.Add($"http://*:{port}"); // For Render
 }
 
-app.UseHttpsRedirection();
+// Enable Swagger always (important for ngrok testing)
+app.UseSwagger();
+app.UseSwaggerUI();
+
+// Uncomment if you want HTTPS, but disable if ngrok causes issues
+// app.UseHttpsRedirection(); 
 
 app.UseAuthorization();
-
 app.UseCors("AllowAll");
-
 app.MapControllers();
-
 app.Run();
