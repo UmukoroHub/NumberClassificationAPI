@@ -5,17 +5,17 @@ EXPOSE 8080
 
 # Set environment variable for Render
 ENV ASPNETCORE_URLS=http://+:8080
-# ENV ASPNETCORE_ENVIRONMENT=$environment
+ENV ASPNETCORE_ENVIRONMENT=$environment
 
 # Build the application
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["NumberClassificationAPI.csproj", "./"]
+COPY ["NumberClassificationAPI\NumberClassificationAPI.csproj", "NumberClassificationAPI/"]
 RUN dotnet restore "NumberClassificationAPI.csproj"
 
 
 COPY . .
-WORKDIR "NumberClassificationAPI"
+WORKDIR "/src/NumberClassificationAPI"
 RUN dotnet build "NumberClassificationAPI.csproj" -c Release -o /app/build
 
 FROM build AS publish
