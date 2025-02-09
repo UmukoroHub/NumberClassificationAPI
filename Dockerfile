@@ -5,7 +5,7 @@ EXPOSE 8080
 
 # Set environment variable for Render
 ENV ASPNETCORE_URLS=http://+:8080
-ENV ASPNETCORE_ENVIRONMENT=$environment
+# ENV ASPNETCORE_ENVIRONMENT=$environment
 
 # Build the application
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
