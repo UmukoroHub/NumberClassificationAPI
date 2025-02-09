@@ -15,7 +15,7 @@ RUN dotnet restore "NumberClassificationAPI.csproj"
 
 
 COPY . .
-WORKDIR "/src/NumberClassificationAPI"
+WORKDIR "NumberClassificationAPI"
 RUN dotnet build "NumberClassificationAPI.csproj" -c Release -o /app/build
 
 FROM build AS publish
@@ -25,5 +25,5 @@ RUN dotnet publish "NumberClassificationAPI.csproj" -c Release -o /app/publish
 # Final runtime image
 FROM base AS final
 WORKDIR /app
-COPY --from=build /app/publish .
+COPY --from=build /app/publish.
 ENTRYPOINT ["dotnet", "NumberClassificationAPI.dll"]
