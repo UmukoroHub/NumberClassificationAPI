@@ -10,12 +10,12 @@ ENV ASPNETCORE_URLS=http://+:8080
 # Build the application
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["NumberClassificationAPI/NumberClassificationAPI.csproj", "./"]
-RUN dotnet restore "NumberClassificationAPI/NumberClassificationAPI.csproj"
+COPY ["NumberClassificationAPI.csproj", "./"]
+RUN dotnet restore "NumberClassificationAPI.csproj"
 
 
 COPY . .
-WORKDIR "/src/NumberClassificationAPI"
+WORKDIR "NumberClassificationAPI"
 RUN dotnet build "NumberClassificationAPI.csproj" -c Release -o /app/build
 
 FROM build AS publish
